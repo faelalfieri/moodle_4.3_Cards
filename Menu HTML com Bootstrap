@@ -1,0 +1,23 @@
+<!--Menu simples com navegação-->
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a href="/course/view.php?id={id_course}&amp;section=0" class="nav-link nav-link-custom text-dark">Ponto de Partida</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a href="/course/view.php?id={id_course}&amp;section=1" class="nav-link nav-link-custom text-dark">Post</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a href="https://ead.proadihaoc.org.br/course/view.php?id={id_course}#conteudo" class="nav-link nav-link-custom text-dark">Conteúdo Programático</a>
+    </li>
+
+    <li class="nav-item" role="presentation">
+        <a href="/course/view.php?id={id_course}&amp;section=2" class="nav-link nav-link-custom text-dark">Biblioteca</a>
+    </li>
+
+    <li class="nav-item" role="presentation">
+        <a href="/course/view.php?id={id_course}&amp;section=3" class="nav-link nav-link-custom text-dark">Autogestão</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a href="/course/view.php?id={id_course}&amp;section=4" class="nav-link nav-link-custom text-dark">Conclusão</a>
+    </li>
+</ul>
