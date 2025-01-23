@@ -1,74 +1,92 @@
-document.addEventListener("DOMContentLoaded", function() {
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
         const cards = document.querySelector(".cards");
         const cardDeck = document.querySelector(".dashboard-card-deck");
         const conteudoLink = document.querySelector("#conteudo");
 
-        // Adiciona &section=0 à URL ao carregar a página
+        /**
+         * Adiciona o parâmetro &section=0 à URL caso ele não esteja presente.
+         */
         function addSectionToUrl() {
-            const url = window.location.href;
-            const hashIndex = url.indexOf("#");
-            const hasSection = url.includes("&section=");
+            const url = new URL(window.location.href);
 
-            if (!hasSection) {
-                let newUrl;
-
-                if (hashIndex !== -1) {
-                    // Adiciona &section=0 após o ID na URL ao clicar na âncora id #conteudo
-                    newUrl = `${url.substring(0, hashIndex)}&section=0${url.substring(hashIndex)}`;
-                } else {
-                    // Adiciona &section=0 no final da URL, se não houver hash
-                    newUrl = `${url}&section=0`;
-                }
-
-                window.history.replaceState(null, "", newUrl);
+            if (!url.searchParams.has("section")) {
+                url.searchParams.set("section", "0");
+                window.history.replaceState(null, "", url.toString());
             }
         }
 
-        // Função para verificar a URL e ajustar visibilidade
-        function checkUrlAndShowCards() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const section = urlParams.get("section");
-            const url = window.location.href;
+        /**
+         * Ajusta a visibilidade dos elementos na página com base nos parâmetros da URL.
+         */
+        function updateVisibility() {
+            const url = new URL(window.location.href);
+            const section = url.searchParams.get("section");
+            const hasHashConteudo = url.hash === "#conteudo";
 
-            if (url.includes("#conteudo")) {
-                // Oculta a UL com classe 'cards'
-                cards.classList.add("d-none");
-
-                // Oculta as 5 primeiras LI da UL com classe 'dashboard-card-deck'
-                const cardDeckItems = cardDeck.querySelectorAll("li");
-                cardDeckItems.forEach((item, index) => {
-                    if (index < 4) {
-                        item.classList.add("d-none");
-                    } else {
-                        item.classList.remove("d-none");
-                    }
-                });
-
-                // Garante que a UL 'dashboard-card-deck' esteja visível
-                cardDeck.classList.remove("d-none");
+            if (hasHashConteudo) {
+                hideCards();
+                showCardDeck(5); // Exibe a partir do 5º item (índice 4)
             } else if (!section || section === "0") {
-                // Se não existir parâmetro 'section' ou for '0'
-                cards.classList.remove("d-none"); // Exibe a UL 'cards'
-                cardDeck.classList.add("d-none"); // Oculta a UL 'dashboard-card-deck'
+                showCards();
+                hideCardDeck();
             } else {
-                cards.classList.add("d-none"); // Oculta a UL 'cards'
-                cardDeck.classList.remove("d-none"); // Exibe a UL 'dashboard-card-deck'
+                hideCards();
+                showCardDeck();
             }
         }
 
-        // Executar a função ao carregar a página
-        addSectionToUrl();
-        checkUrlAndShowCards();
+        /**
+         * Oculta o elemento .cards.
+         */
+        function hideCards() {
+            cards.classList.add("d-none");
+        }
 
-        // Evento de clique no link com id 'conteudo'
-        conteudoLink.addEventListener("click", function(event) {
-            // Impede o comportamento padrão do link
+        /**
+         * Exibe o elemento .cards.
+         */
+        function showCards() {
+            cards.classList.remove("d-none");
+        }
+
+        /**
+         * Oculta o elemento .dashboard-card-deck.
+         */
+        function hideCardDeck() {
+            cardDeck.classList.add("d-none");
+        }
+
+        /**
+         * Exibe o elemento .dashboard-card-deck.
+         * @param {number} [startVisibleIndex=0] - Índice inicial a partir do qual os itens do deck devem ser exibidos.
+         */
+        function showCardDeck(startVisibleIndex = 0) {
+            const cardDeckItems = cardDeck.querySelectorAll("li");
+
+            cardDeckItems.forEach((item, index) => {
+                if (index < startVisibleIndex) {
+                    item.classList.add("d-none");
+                } else {
+                    item.classList.remove("d-none");
+                }
+            });
+
+            cardDeck.classList.remove("d-none");
+        }
+
+        /**
+         * Atualiza a URL ao clicar no link com id 'conteudo' e ajusta a visibilidade.
+         */
+        function handleConteudoLinkClick(event) {
             event.preventDefault();
-
-            // Atualiza a URL com #conteudo sem recarregar a página
             window.location.hash = "conteudo";
+            updateVisibility();
+        }
 
-            // Atualiza a visibilidade sem recarregar a página
-            checkUrlAndShowCards();
-        });
+        // Inicialização
+        addSectionToUrl();
+        updateVisibility();
+        conteudoLink.addEventListener("click", handleConteudoLinkClick);
     });
+</script>
