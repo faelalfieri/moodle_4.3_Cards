@@ -1,58 +1,93 @@
 <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        const cards = document.querySelector(".cards");
-        const cardDeck = document.querySelector(".dashboard-card-deck");
-
-        // Função para verificar a URL e ajustar visibilidade
-        function checkUrlAndShowCards() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const section = urlParams.get("section"); // Obtém o valor do parâmetro 'section'
-
-            if (!section || section === "0") {
-                // Se não existir parâmetro 'section' ou for '0'
-                cards.classList.remove("d-none"); // Exibe a UL 'cards'
-                cardDeck.classList.add("d-none"); // Oculta a UL 'dashboard-card-deck'
-            } else {
-                cards.classList.add("d-none"); // Oculta a UL 'cards'
-                cardDeck.classList.remove("d-none"); // Exibe a UL 'dashboard-card-deck'
-            }
-        }
-
-        // Executar a função ao carregar a página
-        checkUrlAndShowCards();
-    });
-
-    // Parte dois
-
+    //Código refatorado
     document.addEventListener("DOMContentLoaded", function() {
         const cards = document.querySelector(".cards");
         const cardDeck = document.querySelector(".dashboard-card-deck");
+        const conteudoLink = document.querySelector("#conteudo");
 
-        // Função para verificar a URL e ajustar visibilidade
-        function adjustVisibilityBasedOnUrl() {
-            const url = window.location.href;
+        /**
+         * Adiciona o parâmetro &section=0 à URL caso ele não esteja presente.
+         */
+        function addSectionToUrl() {
+            const url = new URL(window.location.href);
 
-            // Verifica se a URL contém '#conteudo'
-            if (url.includes("#conteudo")) {
-                // Oculta a UL com classe 'cards' que contém o LI com ID 'section-0'
-                cards.classList.add("d-none");
-
-                // Oculta as 5 primeiras LI da UL com classe 'dashboard-card-deck'
-                const cardDeckItems = cardDeck.querySelectorAll("li");
-                cardDeckItems.forEach((item, index) => {
-                    if (index < 5) {
-                        item.classList.add("d-none");
-                    } else {
-                        item.classList.remove("d-none");
-                    }
-                });
-
-                // Garante que a UL 'dashboard-card-deck' esteja visível
-                cardDeck.classList.remove("d-none");
+            if (!url.searchParams.has("section")) {
+                url.searchParams.set("section", "0");
+                window.history.replaceState(null, "", url.toString());
             }
         }
 
-        // Executa a função ao carregar a página
-        adjustVisibilityBasedOnUrl();
+        /**
+         * Ajusta a visibilidade dos elementos na página com base nos parâmetros da URL.
+         */
+        function updateVisibility() {
+            const url = new URL(window.location.href);
+            const section = url.searchParams.get("section");
+            const hasHashConteudo = url.hash === "#conteudo";
+
+            if (hasHashConteudo) {
+                hideCards();
+                showCardDeck(5); // Exibe a partir do 5º item (índice 4)
+            } else if (!section || section === "0") {
+                showCards();
+                hideCardDeck();
+            } else {
+                hideCards();
+                showCardDeck();
+            }
+        }
+
+        /**
+         * Oculta o elemento .cards.
+         */
+        function hideCards() {
+            cards.classList.add("d-none");
+        }
+
+        /**
+         * Exibe o elemento .cards.
+         */
+        function showCards() {
+            cards.classList.remove("d-none");
+        }
+
+        /**
+         * Oculta o elemento .dashboard-card-deck.
+         */
+        function hideCardDeck() {
+            cardDeck.classList.add("d-none");
+        }
+
+        /**
+         * Exibe o elemento .dashboard-card-deck.
+         * @param {number} [startVisibleIndex=0] - Índice inicial a partir do qual os itens do deck devem ser exibidos.
+         */
+        function showCardDeck(startVisibleIndex = 0) {
+            const cardDeckItems = cardDeck.querySelectorAll("li");
+
+            cardDeckItems.forEach((item, index) => {
+                if (index < startVisibleIndex) {
+                    item.classList.add("d-none");
+                } else {
+                    item.classList.remove("d-none");
+                }
+            });
+
+            cardDeck.classList.remove("d-none");
+        }
+
+        /**
+         * Atualiza a URL ao clicar no link com id 'conteudo' e ajusta a visibilidade.
+         */
+        function handleConteudoLinkClick(event) {
+            event.preventDefault();
+            window.location.hash = "conteudo";
+            updateVisibility();
+        }
+
+        // Inicialização
+        addSectionToUrl();
+        updateVisibility();
+        conteudoLink.addEventListener("click", handleConteudoLinkClick);
     });
 </script>
