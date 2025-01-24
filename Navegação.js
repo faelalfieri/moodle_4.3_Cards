@@ -1,4 +1,5 @@
 <script>
+    //Código refatorado
     document.addEventListener("DOMContentLoaded", function() {
         const cards = document.querySelector(".cards");
         const cardDeck = document.querySelector(".dashboard-card-deck");
