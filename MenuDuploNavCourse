@@ -1,0 +1,39 @@
+<ul id="main-tabs" class="nav nav-tabs">
+    <li class="nav-item">        
+        <a class="nav-link" href="/course/view.php?id=38&amp;section=0" title="Bússola">Ponto de Partida</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/course/view.php?id=38&amp;section=1" title="Comunicados">Comunicação</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/course/view.php?id=38#conteudo" title="Disciplinas">Disciplinas</a>
+    </li>  
+    <li class="nav-item">
+        <a class="nav-link" href="/course/view.php?id=38&amp;section=2" title="Biblioteca">Biblioteca</a>
+    </li> 
+    <li class="nav-item">
+        <a class="nav-link" href="/course/view.php?id=38&amp;section=2" title="Autogestão">Autogestão</a>
+    </li>  
+    <li class="nav-item ocultar-estudante ocultar-tutorr" style="display:none">
+        <a class="nav-link" href="/course/view.php?id=38&amp;section=4" title="Conclusão">Conclusão</a>
+    </li>
+</ul>
+
+
+<ul id="nav-modules" class="nav nav-tabs mb-3" style="display:none; position: relative; left: 0; top: 6px; width: 100%; margin: 4px auto; flex-wrap: wrap; padding-left: 0; list-style: none;">
+    <li class="nav-item" style="">
+        <a class="nav-link" href="/course/view.php?id=38&amp;section=3">Disciplina 01</a>
+    </li>
+    <li class="nav-item ocultar-se-nao-concluido" style="">
+        <a class="nav-link" href="/course/view.php?id=38&amp;section=4">Disciplina 02</a>
+    </li>
+    <li class="nav-item ocultar-se-nao-concluido" style="">
+        <a class="nav-link" href="/course/view.php?id=38&amp;section=5">Disciplina 03</a>
+    </li>
+    <li class="nav-item ocultar-se-nao-concluido" style="">
+        <a class="nav-link" href="/course/view.php?id=38&amp;section=6">Disciplina 04</a>
+    </li>
+    <li class="nav-item ocultar-se-nao-concluido" style="">
+        <a class="nav-link" href="/course/view.php?id=38&amp;section=7">Disciplina 05</a>
+    </li>
+</ul>
