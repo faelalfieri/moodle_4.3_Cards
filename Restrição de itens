@@ -1,0 +1,70 @@
+<script>
+    //script ocultar itens do menu baseado na conclusão precisa de barra de conclusão
+    document.addEventListener('DOMContentLoaded', () => {
+        //verificar se a pessoa logada tem papel de estudante no DOM
+        const isEstudante = document.body.classList.contains('roleshortname-estudante');
+        console.log('É estudante?', isEstudante);
+        if (!isEstudante) return;
+
+        const idsModulos = ['6514', '6507']; //IDs das atividades a serem concluídas
+        console.log('IDs dos módulos para verificar:', idsModulos);
+
+        // Verifica section na URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const sectionRaw = urlParams.get('section');
+        const section = parseInt(sectionRaw, 10);
+        const sectionMaiorQueDois = !isNaN(section) && section > 2;
+        console.log('sectionMaiorQueDois:', sectionMaiorQueDois);
+
+        //Array que recebe itens concluídos
+        let concluidos = [];
+
+        // Busca todos os blocos de progresso
+        const blocoProgresso = document.querySelector('section.block_completion_progress.block');
+        if (!blocoProgresso) {
+            console.warn('Bloco de progresso não encontrado!');
+        }
+
+        idsModulos.forEach(idModulo => {
+            let encontrado = false;
+
+            if (blocoProgresso) {
+                const divsConcluidas = blocoProgresso.querySelectorAll('div.progressBarCell.completed[data-info-ref]');
+                divsConcluidas.forEach(div => {
+                    const ref = div.getAttribute('data-info-ref');
+                    const infoDiv = blocoProgresso.querySelector(`.progressEventInfo#${ref}`);
+
+                    if (infoDiv) {
+                        const link = infoDiv.querySelector('a[href*="id=' + idModulo + '"]');
+                        if (link) {
+                            console.log(`Módulo ${idModulo} marcado como concluído via barra de progresso.`);
+                            encontrado = true;
+                        }
+                    }
+                });
+            }
+            //empurrando boolean no array
+            concluidos.push(encontrado);
+            if (!encontrado) {
+                console.log(`Módulo ${idModulo} NÃO foi marcado como concluído na barra de progresso.`);
+            }
+        });
+
+        const todosConcluidos = concluidos.length === idsModulos.length && concluidos.every(v => v);
+        console.log('Todos os módulos concluídos?', todosConcluidos);
+
+        // Exibe ou oculta os <ul><li></li> com base na verificação
+        const lis = document.querySelectorAll('li.ocultar-se-nao-concluido');
+        console.log(`Encontradas ${lis.length} <li></li> com classe ocultar-se-nao-concluido.`);
+
+        lis.forEach(li => {
+            if (todosConcluidos && sectionMaiorQueDois) {
+                li.style.display = '';
+                console.log('Mostrando <li></li>:', li);
+            } else {
+                li.style.display = 'none';
+                console.log('Ocultando <li></li></ul>:', li);
+            }
+        });
+    });
+</script>
